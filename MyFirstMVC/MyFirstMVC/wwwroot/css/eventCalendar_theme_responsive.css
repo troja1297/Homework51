@@ -6,6 +6,21 @@
 	background-color:#fff;
 	color:#807E7E;
 }
+
+ body > div > form > label:nth-child(9) {
+	 display: inline;
+ }
+
+ body > div > form > input.btn.btn-success {
+	 display: flex;
+ }
+ 
+ label {
+	 display: flex;
+	 max-width: 100%;
+	 margin-bottom: 5px;
+	 font-weight: bold;
+ }
 	.eventCalendar-wrap .eventCalendar-arrow {
 		text-decoration:none;
 		color:#fff;

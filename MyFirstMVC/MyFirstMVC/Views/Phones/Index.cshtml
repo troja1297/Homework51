@@ -12,10 +12,17 @@
 
 @using (Html.BeginForm("Index", "Phones", FormMethod.Get))
 
+
 {
     @Html.Label("Name", "Модель ")
     @Html.TextBox("name", Model.Name)
+    
+    @Html.Label("Name", "Цена от ");
+    @Html.TextBox("From", "", new { type = "number" });
+    @Html.Label("Name", "Цена до ");
+    @Html.TextBox("To", "", new { type = "number" });
 
+    @Html.Label("Name", "Производитель")
     <select name="companyId" class="form-control">
         <option></option>
         @foreach (Company comp in Model.Companies)
@@ -31,12 +38,19 @@
 
         }
     </select>
+    
+    @Html.Label("name", "В наличии")
+    @Html.CheckBox("IsInStock", false)
+    
+    
 
     <input type="submit" class="btn btn-success" />
 }
 
 <br />
-
+<p>
+    <a asp-action="Create">Создать</a>
+</p>
 
 <table class="table table-bordered">
 
@@ -51,6 +65,9 @@
             <td>
 
                 <a asp-area="" asp-controller="Phones" asp-action="Index" asp-route-companyId="@p.CompanyId">@p.Company?.Name</a>
+            </td>
+            <td>
+                @p.InStock
             </td>
             <td>@p.Price</td>
 

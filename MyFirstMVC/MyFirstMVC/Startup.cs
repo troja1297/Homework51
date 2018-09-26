@@ -28,9 +28,8 @@ namespace MyFirstMVC
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            string connection = Configuration.GetConnectionString("DefaultConnection");
-
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(@"Data Source=.; Database=phoneshop1; User Id =SA; Password =Tromb1297;"));
 
         }
 

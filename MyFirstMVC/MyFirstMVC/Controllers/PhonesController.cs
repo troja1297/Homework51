@@ -20,7 +20,7 @@ namespace MyFirstMVC.Controllers
         }
 
         // GET: Phones
-        public async Task<IActionResult> Index(int? companyId, string name)
+        public async Task<IActionResult> Index(int? companyId, string name, double? From, double? To, bool IsInStock)
         {
             List<Company> companies = _context.Companies.ToList();
 
@@ -41,6 +41,25 @@ namespace MyFirstMVC.Controllers
                 phones = phones.Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
                 ivm.Name = name;
             }
+            
+            if (From.HasValue)
+            {
+                phones = phones.Where(p => p.Price >= From).ToList();
+            }
+            if (To.HasValue)
+            {
+                phones = phones.Where(p => p.Price <= To).ToList();
+            }
+            if (From.HasValue && To.HasValue)
+            {
+                phones = phones.Where(p => p.Price >= From && p.Price <= To).ToList();
+            }
+
+            if (IsInStock)
+            {
+                phones = phones.Where(p => p.InStock == IsInStock).ToList();
+            }
+            
 
             ivm.Companies = companies;
             ivm.Phones = phones;
@@ -70,7 +89,9 @@ namespace MyFirstMVC.Controllers
         // GET: Phones/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id");
+            ViewData["Category"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["Company"] = new SelectList(_context.Companies, "Id", "Name");
+            
             return View();
         }
 
@@ -79,7 +100,7 @@ namespace MyFirstMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Company,Price,CategoryId")] Phone phone)
+        public async Task<IActionResult> Create([Bind("Id,Name,CompanyId,Price,CategoryId,InStock")] Phone phone)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +108,9 @@ namespace MyFirstMVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", phone.CategoryId);
+            ViewData["Category"] = new SelectList(_context.Categories, "Id", "Name", phone.CategoryId);
+            ViewData["Company"] = new SelectList(_context.Companies, "Id", "Name", phone.CompanyId);
+            
             return View(phone);
         }
 
